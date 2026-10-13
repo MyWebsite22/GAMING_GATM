@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATM GAMING OFFLINE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Press+Start+2P&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-purple: #b400ff;
+            --neon-pink: #ff00aa;
+            --neon-green: #00ff6a;
+            --neon-orange: #ff6a00;
+            --neon-red: #ff003c;
+            --dark-bg: #0a0a0f;
+            --card-bg: #12121a;
+            --card-border: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #8888aa;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(0, 240, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(180, 0, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255, 0, 170, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px 20px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(ellipse, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.3));
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.3)); }
+            100% { filter: drop-shadow(0 0 35px rgba(180, 0, 255, 0.4)); }
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        .status-dot.online {
+            background: var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .status-dot.games {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Search & Filter */
+        .controls {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            background: rgba(18, 18, 26, 0.9);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            z-index: 1;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            background: rgba(18, 18, 26, 0.9);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Game Grid */
+        .game-grid {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Game Card */
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-purple), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 240, 255, 0.08);
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .game-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-image .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(10, 10, 15, 0.95) 100%);
+        }
+
+        .card-image .genre-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .genre-tag.fps { background: rgba(255, 0, 60, 0.8); color: #fff; }
+        .genre-tag.action { background: rgba(255, 106, 0, 0.8); color: #fff; }
+        .genre-tag.horror { background: rgba(128, 0, 128, 0.8); color: #fff; }
+        .genre-tag.rpg { background: rgba(0, 100, 255, 0.8); color: #fff; }
+        .genre-tag.sports { background: rgba(0, 180, 0, 0.8); color: #fff; }
+        .genre-tag.racing { background: rgba(255, 200, 0, 0.85); color: #000; }
+        .genre-tag.sandbox { background: rgba(0, 200, 200, 0.8); color: #fff; }
+        .genre-tag.strategy { background: rgba(180, 0, 255, 0.8); color: #fff; }
+        .genre-tag.arcade { background: rgba(255, 0, 170, 0.8); color: #fff; }
+
+        .card-image .game-icon {
+            position: absolute;
+            bottom: -25px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 2;
+            border: 2px solid var(--card-bg);
+            background: var(--card-bg);
+        }
+
+        .card-content {
+            padding: 35px 20px 20px;
+        }
+
+        .card-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .card-content .description {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .play-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 22px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .card-footer .platform {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Game Player Modal / Overlay */
+        .game-player-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .game-player-overlay.active {
+            display: flex;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            min-height: 50px;
+        }
+
+        .player-header .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+        }
+
+        .player-header .player-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .player-control-btn {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .player-control-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .player-control-btn.close-btn {
+            background: rgba(255, 0, 60, 0.15);
+            border-color: rgba(255, 0, 60, 0.3);
+            color: var(--neon-red);
+        }
+
+        .player-control-btn.close-btn:hover {
+            background: rgba(255, 0, 60, 0.3);
+        }
+
+        .game-iframe-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .game-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-bg);
+            z-index: 5;
+            transition: opacity 0.5s;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 240, 255, 0.1);
+            border-top-color: var(--neon-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        .footer .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+                letter-spacing: 4px;
+            }
+            .subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 6px;
+            }
+            .game-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                gap: 20px;
+            }
+            .status-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .player-header {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+                letter-spacing: 3px;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .search-box {
+                min-width: 100%;
+            }
+        }
+
+        /* No game found message */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Cover placeholder with game-specific gradient */
+        .cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .cover-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(10, 10, 15, 0.95) 100%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <h1 class="logo">GATM GAMING</h1>
+        </div>
+        <p class="subtitle">⚡ OFFLINE PORTAL ⚡</p>
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot online"></span>
+                <span>SISTEMA ACTIVO</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot games"></span>
+                <span id="game-count">25 JUEGOS DISPONIBLES</span>
+            </div>
+            <div class="status-item">
+                <span>🌐 REQUIERE INTERNET</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search & Filters -->
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar juego..." autocomplete="off">
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">TODOS</button>
+            <button class="filter-btn" data-filter="fps">FPS</button>
+            <button class="filter-btn" data-filter="action">ACCIÓN</button>
+            <button class="filter-btn" data-filter="horror">HORROR</button>
+            <button class="filter-btn" data-filter="rpg">RPG</button>
+            <button class="filter-btn" data-filter="sports">DEPORTES</button>
+            <button class="filter-btn" data-filter="sandbox">SANDBOX</button>
+            <button class="filter-btn" data-filter="arcade">ARCADE</button>
+        </div>
+    </div>
+
+    <!-- Game Grid -->
+    <div class="game-grid" id="gameGrid">
+        <!-- Cards will be injected by JS -->
+    </div>
+
+    <!-- No results -->
+    <div class="no-results" id="noResults">
+        <div class="icon">🎮</div>
+        <h3>NO SE ENCONTRARON JUEGOS</h3>
+        <p>Intenta con otro término de búsqueda o cambia el filtro</p>
+    </div>
+
+    <!-- Game Player Overlay -->
+    <div class="game-player-overlay" id="gamePlayer">
+        <div class="player-header">
+            <span class="game-title" id="playerTitle">CARGANDO...</span>
+            <div class="player-controls">
+                <button class="player-control-btn" onclick="toggleFullscreen()" title="Pantalla completa">⛶ FULLSCREEN</button>
+                <button class="player-control-btn" onclick="openExternal()" title="Abrir en nueva pestaña">↗ NUEVA PESTAÑA</button>
+                <button class="player-control-btn close-btn" onclick="closePlayer()">✕ CERRAR</button>
+            </div>
+        </div>
+        <div class="game-iframe-container" id="iframeContainer">
+            <div class="loading-screen" id="loadingScreen">
+                <div class="loader"></div>
+                <span class="loading-text">CARGANDO JUEGO...</span>
+            </div>
+            <iframe id="gameIframe" allow="autoplay; fullscreen; gamepad; pointer-lock; keyboard-map" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>⚡ <span class="footer-logo">GATM GAMING OFFLINE</span> ⚡ — Portal de Juegos en Navegador — 2024</p>
+    </footer>
+
+    <script>
+        // ==================== GAME DATA ====================
+        const games = [
+            {
+                id: 1,
+                name: "Moon Zombies",
+                url: "https://moon-zombies.pages.dev",
+                genre: "fps",
+                icon: "🌙",
+                gradient: "linear-gradient(135deg, #1a1a3e, #0d0d2b, #1a0a2e)",
+                description: "Sobrevive a hordas de zombies en la Luna. Mapa clásico de Call of Duty Zombies recreado para navegador con gráficos retro y acción frenética.",
+                coverEmoji: "🧟🌙"
+            },
+            {
+                id: 2,
+                name: "GTA Vice City",
+                url: "https://joncodeofficial.github.io/gta-vice-city-online/",
+                genre: "action",
+                icon: "🌴",
+                gradient: "linear-gradient(135deg, #ff6ec7, #7873f5, #4adede)",
+                description: "La ciudad del vicio te espera. Explora Vice City en los años 80 con toda la acción, los autos y la banda sonora icónica del clásico de Rockstar.",
+                coverEmoji: "🌴🚗"
+            },
+            {
+                id: 3,
+                name: "Quake 3 Arena",
+                url: "https://q3.pieter.com",
+                genre: "fps",
+                icon: "⚡",
+                gradient: "linear-gradient(135deg, #3d0000, #1a0000, #4d1a00)",
+                description: "El legendario shooter de arena de id Software. Combate multijugador rápido e intenso con las armas clásicas: railgun, rocket launcher y más.",
+                coverEmoji: "⚡🔫"
+            },
+            {
+                id: 4,
+                name: "BO1 Zombies",
+                url: "https://vel.gg/bo1z",
+                genre: "fps",
+                icon: "💀",
+                gradient: "linear-gradient(135deg, #0a2e0a, #1a1a00, #2e0a0a)",
+                description: "El modo Zombies de Call of Duty: Black Ops original. Defiende las barricadas, compra armas del muro y sobrevive ronda tras ronda.",
+                coverEmoji: "💀🔫"
+            },
+            {
+                id: 5,
+                name: "Half-Life",
+                url: "https://pixelsuft.github.io/hl/",
+                genre: "fps",
+                icon: "🔬",
+                gradient: "linear-gradient(135deg, #2b1d0e, #1a1a1a, #0e2b1d)",
+                description: "El revolucionario FPS de Valve. Vive la historia de Gordon Freeman en el complejo Black Mesa con este port completo del juego original.",
+                coverEmoji: "🔬λ"
+            },
+            {
+                id: 6,
+                name: "Skate 3",
+                url: "https://skate.aaddpp.lol",
+                genre: "sports",
+                icon: "🛹",
+                gradient: "linear-gradient(135deg, #1a3d5c, #0d1f2d, #2d4a3d)",
+                description: "El mejor juego de skateboarding. Realiza trucos increíbles, explora el mapa abierto y domina las líneas en esta versión web del clásico de EA.",
+                coverEmoji: "🛹🏙️"
+            },
+            {
+                id: 7,
+                name: "Halo CE",
+                url: "https://mitchellhynes.com/halo",
+                genre: "fps",
+                icon: "🪖",
+                gradient: "linear-gradient(135deg, #0a2e0a, #1a2e1a, #003300)",
+                description: "El inicio de la saga del Jefe Maestro. Combate contra el Covenant y el Flood en este port del legendario Halo: Combat Evolved.",
+                coverEmoji: "🪖👽"
+            },
+            {
+                id: 8,
+                name: "Diablo",
+                url: "https://johnimril.github.io/diablo.web/",
+                genre: "rpg",
+                icon: "😈",
+                gradient: "linear-gradient(135deg, #3d0000, #1a0000, #000000)",
+                description: "Desciende a las profundidades del infierno en el clásico RPG de acción de Blizzard. Explora mazmorras, derrota demonios y colecciona loot legendario.",
+                coverEmoji: "😈⚔️"
+            },
+            {
+                id: 9,
+                name: "Modern Warfare 2",
+                url: "https://ovz-game-production.up.railway.app",
+                genre: "fps",
+                icon: "🎯",
+                gradient: "linear-gradient(135deg, #2d3a1a, #1a1a0a, #3a2d1a)",
+                description: "El aclamado Call of Duty: Modern Warfare 2. Experimenta la icónica campaña con misiones como 'No Russian' y combate táctico intenso.",
+                coverEmoji: "🎯💣"
+            },
+            {
+                id: 10,
+                name: "Kino der Toten",
+                url: "https://kino-der-toten.pages.dev",
+                genre: "horror",
+                icon: "🎬",
+                gradient: "linear-gradient(135deg, #1a0a2e, #0a0a1a, #2e0a1a)",
+                description: "El mapa más icónico de Zombies. Lucha contra los no-muertos en el teatro abandonado con las trampas eléctricas y el Thundergun.",
+                coverEmoji: "🎬🧟"
+            },
+            {
+                id: 11,
+                name: "PES 6",
+                url: "https://pes6.optijuegos.net",
+                genre: "sports",
+                icon: "⚽",
+                gradient: "linear-gradient(135deg, #003d00, #001a00, #1a3d00)",
+                description: "Pro Evolution Soccer 6, considerado por muchos el mejor juego de fútbol jamás creado. Revive la magia del fútbol clásico de Konami.",
+                coverEmoji: "⚽🏆"
+            },
+            {
+                id: 12,
+                name: "Unreal Tournament",
+                url: "https://ut.pieter.com",
+                genre: "fps",
+                icon: "🏆",
+                gradient: "linear-gradient(135deg, #2e1a3d, #1a0a2e, #3d1a2e)",
+                description: "El shooter de arena definitivo de Epic Games. Acción multijugador frenética con Flak Cannon, Shock Rifle y mapas legendarios como Facing Worlds.",
+                coverEmoji: "🏆🔥"
+            },
+            {
+                id: 13,
+                name: "Black Ops 2",
+                url: "https://vibeslops.luckeysystems.com",
+                genre: "fps",
+                icon: "🔥",
+                gradient: "linear-gradient(135deg, #1a2e3d, #0a1a2e, #2e3d1a)",
+                description: "Call of Duty: Black Ops 2 con su campaña futurista, el modo zombies Tranzit y el multijugador que definió una generación.",
+                coverEmoji: "🔥🎮"
+            },
+            {
+                id: 14,
+                name: "Simpsons: Hit & Run",
+                url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie",
+                genre: "action",
+                icon: "🍩",
+                gradient: "linear-gradient(135deg, #4d4d00, #333300, #4d3300)",
+                description: "Explora Springfield como Homer, Bart y más. El clásico de mundo abierto estilo GTA con los personajes de Los Simpsons.",
+                coverEmoji: "🍩🚗"
+            },
+            {
+                id: 15,
+                name: "Quake 1",
+                url: "https://q1.pieter.com",
+                genre: "fps",
+                icon: "🔨",
+                gradient: "linear-gradient(135deg, #2e1a00, #1a0a00, #3d2e1a)",
+                description: "El FPS que revolucionó los gráficos 3D. El oscuro y atmosférico Quake original de id Software con toda su acción gótica y lovecraftiana.",
+                coverEmoji: "🔨⚡"
+            },
+            {
+                id: 16,
+                name: "Skate Rust",
+                url: "https://global-terror.net",
+                genre: "sports",
+                icon: "🛹",
+                gradient: "linear-gradient(135deg, #3d2e1a, #2e1a0a, #4d3d2e)",
+                description: "Juego de skateboarding con motor de física realista. Domina kickflips, grinds y manuals en entornos urbanos detallados.",
+                coverEmoji: "🛹🔧"
+            },
+            {
+                id: 17,
+                name: "Halo CE Mobile",
+                url: "https://hcemobile.com",
+                genre: "fps",
+                icon: "📱",
+                gradient: "linear-gradient(135deg, #0a3d0a, #002e00, #1a3d1a)",
+                description: "Versión optimizada de Halo: Combat Evolved para navegadores móviles. La experiencia del Jefe Maestro adaptada para controles táctiles.",
+                coverEmoji: "📱🪖"
+            },
+            {
+                id: 18,
+                name: "BO3 Cheese Cube",
+                url: "https://cheese-cube.pages.dev",
+                genre: "fps",
+                icon: "🧀",
+                gradient: "linear-gradient(135deg, #3d3d00, #2e2e00, #4d4d1a)",
+                description: "Mapa personalizado de Black Ops 3 Zombies. Sobrevive en un cubo de queso con armas custom y easter eggs por descubrir.",
+                coverEmoji: "🧀💀"
+            },
+            {
+                id: 19,
+                name: "Return to Castle Wolfenstein",
+                url: "https://rtcw.pieter.com",
+                genre: "fps",
+                icon: "🏰",
+                gradient: "linear-gradient(135deg, #2e2e1a, #1a1a0a, #3d2e1a)",
+                description: "El clásico de id Software y Gray Matter. Infiltra castillos nazis, combate soldados y enfrenta el horror sobrenatural en la Alemania de WWII.",
+                coverEmoji: "🏰⚔️"
+            },
+            {
+                id: 20,
+                name: "CS Surf",
+                url: "https://surfd.net",
+                genre: "action",
+                icon: "🏄",
+                gradient: "linear-gradient(135deg, #1a2e4d, #0a1a3d, #2e4d1a)",
+                description: "El icónico modo Surf de Counter-Strike. Deslízate por rampas, mantén el equilibrio y completa mapas de surf cada vez más difíciles.",
+                coverEmoji: "🏄💨"
+            },
+            {
+                id: 21,
+                name: "Half-Life / CS 1.6",
+                url: "https://x8bitrain.github.io/webXash/",
+                genre: "fps",
+                icon: "🔫",
+                gradient: "linear-gradient(135deg, #1a1a2e, #0a0a1a, #2e1a1a)",
+                description: "Half-Life y Counter-Strike 1.6 en el navegador mediante Xash3D. Revive los clásicos de Valve con el motor GoldSrc portado a WebAssembly.",
+                coverEmoji: "🔫λ"
+            },
+            {
+                id: 22,
+                name: "Quake 2",
+                url: "https://q2.pieter.com",
+                genre: "fps",
+                icon: "🛸",
+                gradient: "linear-gradient(135deg, #2e0a1a, #1a0a0a, #0a2e1a)",
+                description: "La secuela del legendario Quake. Combate alienígenas Strogg en este shooter de ciencia ficción con armas devastadoras y niveles interconectados.",
+                coverEmoji: "🛸🔫"
+            },
+            {
+                id: 23,
+                name: "Hedgewars",
+                url: "https://webwars.link",
+                genre: "strategy",
+                icon: "🦔",
+                gradient: "linear-gradient(135deg, #0a3d2e, #003d1a, #1a4d3d)",
+                description: "Juego de artillería por turnos con erizos. Similar a Worms, con armas locas, escenarios destructibles y multijugador divertido.",
+                coverEmoji: "🦔💣"
+            },
+            {
+                id: 24,
+                name: "GTA 5",
+                url: "https://web.archive.org/web/20261006050000*/gta5.com",
+                genre: "action",
+                icon: "🏙️",
+                gradient: "linear-gradient(135deg, #1a3d1a, #0a2e0a, #2e4d1a)",
+                description: "Grand Theft Auto V, el juego de mundo abierto definitivo de Rockstar Games. Explora Los Santos con Michael, Franklin y Trevor.",
+                coverEmoji: "🏙️💰"
+            },
+            {
+                id: 25,
+                name: "GTA / Minecraft & Más",
+                url: "https://wasmarcade.com",
+                genre: "sandbox",
+                icon: "🎮",
+                gradient: "linear-gradient(135deg, #2e1a3d, #1a0a2e, #3d2e4d)",
+                description: "WasmArcade: Colección de juegos clásicos portados a WebAssembly incluyendo GTA, Minecraft y muchos más títulos retro ejecutables en el navegador.",
+                coverEmoji: "🎮🕹️"
+            }
+        ];
+
+        // ==================== RENDER CARDS ====================
+        function renderCards(filteredGames) {
+            const grid = document.getElementById('gameGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredGames.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.add('visible');
+                return;
+            }
+            
+            noResults.classList.remove('visible');
+            
+            grid.innerHTML = filteredGames.map((game, index) => `
+                <div class="game-card" data-genre="${game.genre}" style="animation: fadeInUp 0.5s ${index * 0.05}s both">
+                    <div class="card-image">
+                        <div class="cover-placeholder" style="background: ${game.gradient}">
+                            <span style="font-size: 4rem; z-index: 1;">${game.coverEmoji}</span>
+                        </div>
+                        <div class="overlay"></div>
+                        <span class="genre-tag ${game.genre}">${getGenreLabel(game.genre)}</span>
+                        <div class="game-icon" style="background: ${game.gradient}; font-size: 1.3rem;">
+                            ${game.icon}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>${game.name}</h3>
+                        <p class="description">${game.description}</p>
+                        <div class="card-footer">
+                            <button class="play-btn" onclick="openGame('${game.url}', '${game.name.replace(/'/g, "\\'")}')">
+                                ▶ JUGAR
+                            </button>
+                            <span class="platform">🌐 Web</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getGenreLabel(genre) {
+            const labels = {
+                fps: 'FPS',
+                action: 'ACCIÓN',
+                horror: 'HORROR',
+                rpg: 'RPG',
+                sports: 'DEPORTES',
+                racing: 'RACING',
+                sandbox: 'SANDBOX',
+                strategy: 'ESTRATEGIA',
+                arcade: 'ARCADE'
+            };
+            return labels[genre] || genre.toUpperCase();
+        }
+
+        // ==================== GAME PLAYER ====================
+        let currentGameUrl = '';
+
+        function openGame(url, name) {
+            const overlay = document.getElementById('gamePlayer');
+            const iframe = document.getElementById('gameIframe');
+            const loading = document.getElementById('loadingScreen');
+            const title = document.getElementById('playerTitle');
+            
+            currentGameUrl = url;
+            title.textContent = name.toUpperCase();
+            loading.classList.remove('hidden');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            iframe.src = url;
+            iframe.onload = () => {
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                }, 800);
+            };
+
+            // Fallback: hide loading after 5 seconds regardless
+            setTimeout(() => {
+                loading.classList.add('hidden');
+            }, 5000);
+        }
+
+        function closePlayer() {
+            const overlay = document.getElementById('gamePlayer');
+            const iframe = document.getElementById('gameIframe');
+            
+            overlay.classList.remove('active');
+            iframe.src = '';
+            document.body.style.overflow = '';
+            currentGameUrl = '';
+        }
+
+        function toggleFullscreen() {
+            const container = document.getElementById('gamePlayer');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    console.log('Fullscreen error:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function openExternal() {
+            if (currentGameUrl) {
+                window.open(currentGameUrl, '_blank');
+            }
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePlayer();
+            }
+        });
+
+        // ==================== SEARCH & FILTER ====================
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        let activeFilter = 'all';
+
+        searchInput.addEventListener('input', () => {
+            filterAndRender();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeFilter = btn.dataset.filter;
+                filterAndRender();
+            });
+        });
+
+        function filterAndRender() {
+            const query = searchInput.value.toLowerCase().trim();
+            let filtered = games;
+
+            if (activeFilter !== 'all') {
+                filtered = filtered.filter(g => g.genre === activeFilter);
+            }
+
+            if (query) {
+                filtered = filtered.filter(g =>
+                    g.name.toLowerCase().includes(query) ||
+                    g.description.toLowerCase().includes(query) ||
+                    g.genre.toLowerCase().includes(query)
+                );
+            }
+
+            renderCards(filtered);
+        }
+
+        // ==================== PARTICLES ====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = 30;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (8 + Math.random() * 15) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.width = (1 + Math.random() * 2) + 'px';
+                particle.style.height = particle.style.width;
+                
+                const colors = ['var(--neon-cyan)', 'var(--neon-purple)', 'var(--neon-pink)', 'var(--neon-green)'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== FADE IN ANIMATION ====================
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ==================== INIT ====================
+        createParticles();
+        renderCards(games);
+    </script>
+</body>
+</html>
